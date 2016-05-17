@@ -1,0 +1,54 @@
+group 'net.yahyaalfayad.gradle.plugins'
+//name 'gradle-profiles-plugin'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath "com.gradle.publish:plugin-publish-plugin:0.9.4"
+    }
+}
+
+//apply plugin: 'com.gradle.plugin-publish'
+apply plugin: 'groovy'
+apply plugin: 'maven'
+
+//pluginBundle {
+//    website = 'http://www.gradle.org/'
+//    vcsUrl = 'https://github.com/gradle/gradle'
+//    description = 'Build profiles plugin'
+//    tags = ['build', 'profile', 'profiles', 'build-profiles']
+//
+//    plugins {
+//        buildProfilesPlugin {
+//            id = 'net.yahyaalfayad.gradle.plugins.buildprofiles'
+//            displayName = 'Build Profiles Plugin'
+//        }
+//    }
+//}
+
+dependencies {
+    compile gradleApi()
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: uri('../repo'))
+        }
+    }
+}
+
+uploadArchives.doFirst {
+    def localRepoFolder = file('../repo')
+    localRepoFolder.deleteDir()
+}
+
+task dummy <<{
+    def localRepoFolder = file('../repo')
+    println(localRepoFolder.list().toArrayString())
+}

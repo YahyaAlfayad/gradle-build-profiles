@@ -1,0 +1,21 @@
+group 'net.yahyaalfayad.gradle.plugins'
+version '1.0-SNAPSHOT'
+
+subprojects {
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    apply plugin: 'idea'
+    apply plugin: 'groovy'
+
+    dependencies {
+        testCompile group: 'junit', name: 'junit', version: '4.12'
+    }
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.9'
+}

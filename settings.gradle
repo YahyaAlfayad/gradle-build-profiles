@@ -1,0 +1,4 @@
+rootProject.name = 'gradle-buildprofiles-plugin-container'
+include 'gradle-buildprofiles-plugin'
+include 'gradle-profiles-plugin-consumer'
+

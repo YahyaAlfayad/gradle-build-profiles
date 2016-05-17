@@ -1,0 +1,21 @@
+group 'net.yahyaalfayad.gradle.plugins'
+version '1.0-SNAPSHOT'
+
+buildscript {
+    repositories {
+        mavenLocal()
+        mavenCentral()
+        maven {
+            url uri('../repo')
+        }
+    }
+    dependencies {
+//        classpath 'net.yahyaalfayad.gradle.plugins:gradle-buildprofiles-plugin:1+'
+    }
+}
+
+dependencies {
+    compile 'org.codehaus.groovy:groovy-all:2.4.6'
+}
+
+//apply plugin: 'gradle-buildprofiles-plugin'
