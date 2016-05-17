@@ -1,5 +1,6 @@
 repo/
-build/
+gradle-buildprofiles-plugin/build
+gradle-profiles-plugin-consumer/build
 .idea
 .gradle
 .DS_Store
