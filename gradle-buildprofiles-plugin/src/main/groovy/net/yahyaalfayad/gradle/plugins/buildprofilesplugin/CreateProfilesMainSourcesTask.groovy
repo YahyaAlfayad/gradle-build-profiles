@@ -7,7 +7,7 @@ class CreateProfilesMainSourcesTask extends BuildProfileTask {
     @TaskAction
     def action() {
         buildProfilesConfig.with {
-            allProfiles.forEach { activeBuildProfile ->
+            buildProfiles.forEach { activeBuildProfile ->
                 utils.createProfileMainSources(activeBuildProfile, programingLanguages)
             }
         }

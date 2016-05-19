@@ -23,9 +23,9 @@ final class Utils {
 
         currentlySpecifiedLanguages.forEach { specifiedProgramingLanguage ->
 
-            if (sourceSets.main.hasProperty("${specifiedProgramingLanguage}")) {
+            if (project.sourceSets.main.hasProperty("${specifiedProgramingLanguage}")) {
 
-                project.sourceSets."${sourceSet}"."${specifiedProgramingLanguage}".srcDir "src/${sourceSet}/${folderBaseName}${specifiedProgramingLanguage}-${buildProfile}"
+                project.sourceSets."${sourceSet}"."${specifiedProgramingLanguage}".srcDir "src/${sourceSet}/${specifiedProgramingLanguage}-${buildProfile}"
             }
         }
     }

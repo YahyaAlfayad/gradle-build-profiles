@@ -10,7 +10,7 @@ buildscript {
         }
     }
     dependencies {
-//        classpath 'net.yahyaalfayad.gradle.plugins:gradle-buildprofiles-plugin:1+'
+        classpath 'net.yahyaalfayad.gradle.plugins:gradle-buildprofiles-plugin:1+'
     }
 }
 
@@ -18,4 +18,8 @@ dependencies {
     compile 'org.codehaus.groovy:groovy-all:2.4.6'
 }
 
-//apply plugin: 'gradle-buildprofiles-plugin'
+apply plugin: 'gradle-buildprofiles-plugin'
+
+buildProfilesConfig {
+    buildProfiles  = ['uat', 'prod']
+}

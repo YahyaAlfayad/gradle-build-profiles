@@ -7,7 +7,7 @@ class UpdateBuildProfilesSourceSetsTask extends BuildProfileTask {
     @TaskAction
     def action() {
         buildProfilesConfig.with {
-            activeProfiles.forEach { activeBuildProfile ->
+            getActiveBuildProfiles().forEach { activeBuildProfile ->
                 utils.updateMainSourcesForProfile(activeBuildProfile, programingLanguages)
             }
         }

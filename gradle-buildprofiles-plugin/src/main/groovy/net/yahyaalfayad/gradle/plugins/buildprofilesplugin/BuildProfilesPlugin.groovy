@@ -10,7 +10,6 @@ class BuildProfilesPlugin implements Plugin<Project> {
 
         project.extensions.create('buildProfilesConfig', BuildProfilesConfig, project)
 
-        project.tasks.create('updateBuildProfilesSourceSets', UpdateBuildProfilesSourceSetsTask)
 
         project.tasks.create('createProfilesMainSources', CreateProfilesMainSourcesTask)
         project.tasks.create('createProfilesMainResources', CreateProfilesMainResourcesTask)
@@ -18,11 +17,13 @@ class BuildProfilesPlugin implements Plugin<Project> {
         project.tasks.create('createProfilesTestSources', CreateProfilesTestSourcesTest)
         project.tasks.create('createProfilesTestResources', CreateProfilesTestResourcesTask)
 
+        project.tasks.create('updateBuildProfilesSourceSets', UpdateBuildProfilesSourceSetsTask)
+
         project.tasks.create('createProfiles').configure {
 
             dependsOn << ['createProfilesMainSources',
                           'createProfilesMainResources',
-                          'createProfilesMainSources',
+                          'createProfilesTestSources',
                           'createProfilesTestResources',
                           'updateBuildProfilesSourceSets']
         }

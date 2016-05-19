@@ -8,7 +8,7 @@ class CreateProfilesTestSourcesTest extends BuildProfileTask {
     def action() {
 
         buildProfilesConfig.with {
-            allProfiles.forEach { activeBuildProfile ->
+            buildProfiles.forEach { activeBuildProfile ->
                 utils.createProfileTestSources(activeBuildProfile, programingLanguages)
             }
         }

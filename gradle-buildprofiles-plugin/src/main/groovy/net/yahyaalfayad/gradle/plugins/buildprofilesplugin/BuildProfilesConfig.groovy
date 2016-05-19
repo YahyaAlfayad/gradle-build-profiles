@@ -5,15 +5,15 @@ import org.gradle.api.Project
 class BuildProfilesConfig {
 
     final Project project
-    // TODO default initialize from available plugins
-    List programingLanguages
-    //TODO choose better names
-    List allProfiles = []
-    List activeProfiles = []
 
-    BuildProfilesConfig(Project project) {
+    List programingLanguages
+
+    List buildProfiles = []
+    List activeBuildProfiles = []
+
+    public BuildProfilesConfig(Project project) {
         this.project = project
-        this.programingLanguages = initializeProgramingLanguages()
+        programingLanguages = initializeProgramingLanguages()
     }
 
     private final List initializeProgramingLanguages() {
@@ -27,5 +27,9 @@ class BuildProfilesConfig {
             }
         }
         return programingLanguages
+    }
+
+    List getActiveBuildProfiles() {
+        return (activeBuildProfiles ?: buildProfiles)
     }
 }
