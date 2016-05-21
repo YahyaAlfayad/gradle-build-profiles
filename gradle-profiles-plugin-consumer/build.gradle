@@ -21,5 +21,16 @@ dependencies {
 apply plugin: 'gradle-buildprofiles-plugin'
 
 buildProfilesConfig {
-    buildProfiles  = ['uat', 'prod']
+    buildProfiles  = ['uat']
+}
+//sourceSets{
+//    main {
+//        java{
+//            srcDir 'src/main/java-prod'
+//        }
+//    }
+//}
+task blah << {
+//    sourceSets."${'main'}"."${'java'}".srcDir "src/main/${'java'}-${'uat'}"
+    project.sourceSets.main.java.srcDir 'src/main/java-uat'
 }

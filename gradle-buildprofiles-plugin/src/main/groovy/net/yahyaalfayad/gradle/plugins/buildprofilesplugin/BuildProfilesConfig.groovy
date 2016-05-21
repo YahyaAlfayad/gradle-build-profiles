@@ -5,6 +5,7 @@ import org.gradle.api.Project
 class BuildProfilesConfig {
 
     final Project project
+    final Utils utils;
 
     List programingLanguages
 
@@ -13,6 +14,7 @@ class BuildProfilesConfig {
 
     public BuildProfilesConfig(Project project) {
         this.project = project
+        this.utils = new Utils(project)
         programingLanguages = initializeProgramingLanguages()
     }
 
@@ -29,7 +31,28 @@ class BuildProfilesConfig {
         return programingLanguages
     }
 
+    void setActiveBuildProfiles(List activeBuildProfiles) {
+        this.activeBuildProfiles = activeBuildProfiles
+        updateSourcesForProfiles()
+    }
+
     List getActiveBuildProfiles() {
         return (activeBuildProfiles ?: buildProfiles)
+    }
+
+    void setBuildProfiles(List buildProfiles) {
+        this.buildProfiles = buildProfiles
+        updateSourcesForProfiles()
+    }
+
+    private void updateSourcesForProfiles() {
+
+        getBuildProfiles().forEach { buildProfile ->
+            project.sourceSets.main.java.srcDirs.remove buildProfile
+        }
+
+        getActiveBuildProfiles().forEach { buildProfile ->
+            utils.updateMainSourcesForProfile(buildProfile, getProgramingLanguages())
+        }
     }
 }

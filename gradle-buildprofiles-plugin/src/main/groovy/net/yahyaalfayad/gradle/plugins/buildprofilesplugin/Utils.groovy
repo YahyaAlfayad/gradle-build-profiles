@@ -1,8 +1,14 @@
 package net.yahyaalfayad.gradle.plugins.buildprofilesplugin
 
 import org.gradle.api.Project
+import org.slf4j.Logger
+import org.slf4j.LoggerFactory
 
+// TODO devide into updateUtils and ceate utils
+// TODO add update testSourceSets for profile
 final class Utils {
+
+    private static final Logger logger = LoggerFactory.getLogger(Utils.class)
 
     private Project project
 
@@ -21,12 +27,15 @@ final class Utils {
                                               final def buildProfile,
                                               final List currentlySpecifiedLanguages) {
 
+        logger.debug("updating ${sourceSet} for profile: ${buildProfile}")
+
         currentlySpecifiedLanguages.forEach { specifiedProgramingLanguage ->
 
-            if (project.sourceSets.main.hasProperty("${specifiedProgramingLanguage}")) {
-
-                project.sourceSets."${sourceSet}"."${specifiedProgramingLanguage}".srcDir "src/${sourceSet}/${specifiedProgramingLanguage}-${buildProfile}"
-            }
+            logger.debug("updating ${sourceSet} for profile: ${buildProfile} and progrming language: ${specifiedProgramingLanguage}")
+            logger.debug("content of ${sourceSet} sources before update is: ${project.sourceSets."$sourceSet"}")
+            logger.debug('adding the following source folder: ' + "src/${sourceSet}/${specifiedProgramingLanguage}-${buildProfile}")
+            project.sourceSets."${sourceSet}"."${specifiedProgramingLanguage}".srcDir "src/${sourceSet}/${specifiedProgramingLanguage}-${buildProfile}"
+            logger.debug("content of ${sourceSet} sources after update is: ${project.sourceSets."$sourceSet"}")
         }
     }
 
