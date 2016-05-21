@@ -31,7 +31,7 @@ class BuildProfilesConfig {
         return programingLanguages
     }
 
-    void setActiveBuildProfiles(List activeBuildProfiles) {
+    void setActiveBuildProfiles(final List activeBuildProfiles) {
         this.activeBuildProfiles = activeBuildProfiles
         updateSourcesForProfiles()
     }
@@ -40,19 +40,19 @@ class BuildProfilesConfig {
         return (activeBuildProfiles ?: buildProfiles)
     }
 
-    void setBuildProfiles(List buildProfiles) {
+    void setBuildProfiles(final List buildProfiles) {
         this.buildProfiles = buildProfiles
         updateSourcesForProfiles()
     }
 
     private void updateSourcesForProfiles() {
 
-        getBuildProfiles().forEach { buildProfile ->
-            project.sourceSets.main.java.srcDirs.remove buildProfile
-        }
+        // remove build profiles before adding only active ones
+        // needed in case that buildProfiles was set before active build profiles
+        project.sourceSets.main.java.srcDirs.remove getBuildProfiles()
 
         getActiveBuildProfiles().forEach { buildProfile ->
-            utils.updateMainSourcesForProfile(buildProfile, getProgramingLanguages())
+            utils.updateAllFoldersForProfile(buildProfile, getProgramingLanguages())
         }
     }
 }

@@ -9,7 +9,7 @@ class CreateProfilesMainResourcesTask extends BuildProfileTask {
 
         buildProfilesConfig.with {
             buildProfiles.forEach { activeBuildProfile ->
-                utils.createProfileMainSources(activeBuildProfile, programingLanguages)
+                utils.createProfileMainResources(activeBuildProfile)
             }
         }
     }

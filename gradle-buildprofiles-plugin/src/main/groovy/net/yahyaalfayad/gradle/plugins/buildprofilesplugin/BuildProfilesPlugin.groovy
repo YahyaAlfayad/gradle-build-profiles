@@ -11,11 +11,8 @@ class BuildProfilesPlugin implements Plugin<Project> {
 
     @Override
     void apply(Project project) {
-        // TODO update sources here
 
-//        project.sourceSets.main.java.srcDir 'src/main/java-prod'
-
-        logger.info('applying build profiles plugin')
+        logger.debug('applying build profiles plugin')
 
         logger.debug('creating build profiles extension object')
         project.extensions.create('buildProfilesConfig', BuildProfilesConfig, project)
@@ -32,19 +29,13 @@ class BuildProfilesPlugin implements Plugin<Project> {
         logger.debug('creating createProfilesTestResources task')
         project.tasks.create('createProfilesTestResources', CreateProfilesTestResourcesTask)
 
-        logger.debug('creating updateBuildProfiles task')
-        project.tasks.create('updateBuildProfiles', UpdateBuildProfilesSourceSetsTask).configure {
-            action()
-        }
-
         logger.debug('creating createProfiles task')
         project.tasks.create('createProfiles').configure {
 
             dependsOn << ['createProfilesMainSources',
                           'createProfilesMainResources',
                           'createProfilesTestSources',
-                          'createProfilesTestResources',
-                          'updateBuildProfiles']
+                          'createProfilesTestResources']
         }
     }
 }

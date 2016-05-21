@@ -21,7 +21,7 @@ dependencies {
 apply plugin: 'gradle-buildprofiles-plugin'
 
 buildProfilesConfig {
-    buildProfiles  = ['uat']
+    buildProfiles  = ['prod', 'uat']
 }
 //sourceSets{
 //    main {
