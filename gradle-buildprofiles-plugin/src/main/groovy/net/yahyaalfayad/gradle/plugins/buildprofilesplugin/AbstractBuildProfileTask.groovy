@@ -2,7 +2,7 @@ package net.yahyaalfayad.gradle.plugins.buildprofilesplugin
 
 import org.gradle.api.DefaultTask
 
-abstract class BuildProfileTask extends DefaultTask {
+abstract class AbstractBuildProfileTask extends DefaultTask {
 
     BuildProfilesConfig buildProfilesConfig = project.buildProfilesConfig ?: new BuildProfilesConfig()
 

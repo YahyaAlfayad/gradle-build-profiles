@@ -33,6 +33,7 @@ apply plugin: 'maven'
 
 dependencies {
     compile gradleApi()
+    testCompile group: 'commons-io', name: 'commons-io', version: '2.5'
 }
 
 uploadArchives {

@@ -2,7 +2,7 @@ package net.yahyaalfayad.gradle.plugins.buildprofilesplugin
 
 import org.gradle.api.tasks.TaskAction
 
-class CreateProfilesMainResourcesTask extends BuildProfileTask {
+class CreateProfilesMainResourcesTask extends AbstractBuildProfileTask {
 
     @TaskAction
     def action() {

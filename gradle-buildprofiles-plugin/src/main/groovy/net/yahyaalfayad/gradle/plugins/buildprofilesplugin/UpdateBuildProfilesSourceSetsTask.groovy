@@ -5,7 +5,7 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 // TODO remove this class
-class UpdateBuildProfilesSourceSetsTask extends BuildProfileTask {
+class UpdateBuildProfilesSourceSetsTask extends AbstractBuildProfileTask {
 
     private static Logger logger = LoggerFactory.getLogger(UpdateBuildProfilesSourceSetsTask.class)
 

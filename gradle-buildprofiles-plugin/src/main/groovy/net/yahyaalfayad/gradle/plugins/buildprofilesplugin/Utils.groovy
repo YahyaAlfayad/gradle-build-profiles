@@ -5,7 +5,6 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
 // TODO divide into updateUtils and create utils
-// TODO add update testSourceSets for profile
 final class Utils {
 
     private static final Logger logger = LoggerFactory.getLogger(Utils.class)
