@@ -8,11 +8,11 @@ buildscript {
         }
     }
     dependencies {
-        classpath 'net.yahyaalfayad.gradle.plugins:gradle-buildprofiles-plugin:1+'
+        classpath "build-profiles:build-profiles-plugin:1.+"
     }
 }
 
-apply plugin: 'build-profiles'
+apply plugin: 'net.yhf.build-profiles'
 
 buildProfilesConfig {
     buildProfiles = ['prod', 'uat']

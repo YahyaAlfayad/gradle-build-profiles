@@ -4,3 +4,4 @@ gradle-profiles-plugin-consumer/build
 .idea
 .gradle
 .DS_Store
+gradle/wrapper
