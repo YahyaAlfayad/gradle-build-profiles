@@ -1,11 +1,14 @@
 package net.yahyaalfayad.gradle.plugins.buildprofilesplugin
 
+import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.utils.UpdateUtils
 import org.gradle.api.Project
 
 class BuildProfilesConfig {
 
+    static final List DEFAULT_PROGRAMING_LANGUAGES = ['java', 'groovy', 'scala']
+
     final Project project
-    final Utils utils;
+    final UpdateUtils updateUtils;
 
     List programingLanguages
 
@@ -13,34 +16,41 @@ class BuildProfilesConfig {
     List activeBuildProfiles = []
 
     public BuildProfilesConfig(Project project) {
+
         this.project = project
-        this.utils = new Utils(project)
+        this.updateUtils = new UpdateUtils(project)
+
         programingLanguages = initializeProgramingLanguages()
     }
 
     private final List initializeProgramingLanguages() {
-        List programingLanguages = []
-        final List supportedProgramingLanguages = ['java', 'groovy', 'scala']
+
+        List definedProgramingLanguages = []
+        final List supportedProgramingLanguages = DEFAULT_PROGRAMING_LANGUAGES
 
         supportedProgramingLanguages.forEach { programingLanguage ->
 
             if (project.plugins.hasPlugin(programingLanguage)) {
-                programingLanguages << programingLanguage
+                definedProgramingLanguages << programingLanguage
             }
         }
-        return programingLanguages
+
+        return definedProgramingLanguages
     }
 
     void setActiveBuildProfiles(final List activeBuildProfiles) {
+
         this.activeBuildProfiles = activeBuildProfiles
         updateSourcesForProfiles()
     }
 
     List getActiveBuildProfiles() {
+
         return (activeBuildProfiles ?: buildProfiles)
     }
 
     void setBuildProfiles(final List buildProfiles) {
+
         this.buildProfiles = buildProfiles
         updateSourcesForProfiles()
     }
@@ -52,7 +62,7 @@ class BuildProfilesConfig {
         project.sourceSets.main.java.srcDirs.remove getBuildProfiles()
 
         getActiveBuildProfiles().forEach { buildProfile ->
-            utils.updateAllFoldersForProfile(buildProfile, getProgramingLanguages())
+            updateUtils.updateAllFoldersForProfile(buildProfile, getProgramingLanguages())
         }
     }
 }

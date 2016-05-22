@@ -1,6 +1,10 @@
 package net.yahyaalfayad.gradle.plugins
 
 import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.*
+import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.tasks.CreateProfilesMainResourcesTask
+import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.tasks.CreateProfilesMainSourcesTask
+import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.tasks.CreateProfilesTestResourcesTask
+import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.tasks.CreateProfilesTestSourcesTest
 import org.gradle.api.Project
 import org.gradle.testfixtures.ProjectBuilder
 import org.junit.Test
@@ -11,6 +15,7 @@ class BuildProfilesPluginTest {
 
     @Test
     void apply() {
+
         Project project = ProjectBuilder.builder().build()
         project.pluginManager.apply BuildProfilesPlugin
 
