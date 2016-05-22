@@ -15,11 +15,13 @@ In order to get started with the build profiles plugin, you need to do the follo
 
 * Configure your build profiles in `build.gradle` as follows:
 
-``
-buildProfilesConfig {
-    buildProfiles = ['prod', 'uat']
-}
-``
+```
+
+    buildProfilesConfig {
+        buildProfiles = ['prod', 'uat']
+    }
+
+```
 
 Note: you need to add the configuration block after the `apply plugin` block.
 
