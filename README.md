@@ -1,4 +1,4 @@
-# Build profiles Plugin
+# Build Profiles Plugin
 
 ## Introduction
 
@@ -15,11 +15,13 @@ In order to get started with the build profiles plugin, you need to do the follo
 
 * Configure your build profiles in `build.gradle` as follows:
 
-``
-buildProfilesConfig {
-    buildProfiles = ['prod', 'uat']
-}
-``
+```
+
+    buildProfilesConfig {
+        buildProfiles = ['prod', 'uat']
+    }
+
+```
 
 Note: you need to add the configuration block after the `apply plugin` block.
 
@@ -88,4 +90,4 @@ The same situation applies for `buildProfiles`. You can set the following in `gr
 ```
 
 You can also use `-DactiveBuildProfiles=prod,uat` or `-DbuildProfiles=prod,uat`
-when calling gradle from command line. This will override the values defined in `build.gradle`
+when calling gradle from command line. This will override the values defined in `build.gradle`.
