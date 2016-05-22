@@ -12,8 +12,8 @@ class BuildProfilesConfig {
 
     List programingLanguages
 
-    List buildProfiles = []
-    List activeBuildProfiles = []
+    List buildProfiles
+    List activeBuildProfiles
 
     public BuildProfilesConfig(Project project) {
 
@@ -46,13 +46,24 @@ class BuildProfilesConfig {
 
     List getActiveBuildProfiles() {
 
-        return (activeBuildProfiles ?: buildProfiles)
+        return (commaSeparatedSystemPropertyAsList('activeBuildProfiles') ?: (activeBuildProfiles ?: getBuildProfiles()))
+    }
+
+    private List commaSeparatedSystemPropertyAsList(String systemProperty) {
+
+        return (System.properties[systemProperty]?.split(',')?.collect {
+            it.trim()
+        }?.toList() ?: null)
     }
 
     void setBuildProfiles(final List buildProfiles) {
 
         this.buildProfiles = buildProfiles
         updateSourcesForProfiles()
+    }
+
+    List getBuildProfiles(){
+        return (commaSeparatedSystemPropertyAsList('buildProfiles') ?: (buildProfiles ?: []))
     }
 
     private void updateSourcesForProfiles() {
