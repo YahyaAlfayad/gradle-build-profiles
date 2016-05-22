@@ -3,8 +3,6 @@ version '1.0-SNAPSHOT'
 
 buildscript {
     repositories {
-        mavenLocal()
-        mavenCentral()
         maven {
             url uri('../repo')
         }
@@ -14,11 +12,7 @@ buildscript {
     }
 }
 
-dependencies {
-    compile 'org.codehaus.groovy:groovy-all:2.4.6'
-}
-
-apply plugin: 'gradle-buildprofiles-plugin'
+apply plugin: 'build-profiles'
 
 buildProfilesConfig {
     buildProfiles = ['prod', 'uat']

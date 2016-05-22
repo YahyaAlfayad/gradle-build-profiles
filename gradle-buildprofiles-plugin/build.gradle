@@ -1,5 +1,5 @@
-group 'net.yahyaalfayad.gradle.plugins'
-version '1.0-SNAPSHOT'
+group = 'net.yahyaalfayad.gradle.plugins'
+version = '1.0'
 
 buildscript {
     repositories {
@@ -17,14 +17,14 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 
 pluginBundle {
-    website = 'http://www.gradle.org/'
-    vcsUrl = 'https://github.com/gradle/gradle'
-    description = 'Build profiles plugin'
+    website = 'https://github.com/YahyaAlfayad/gradle-build-profiles'
+    vcsUrl = 'https://github.com/YahyaAlfayad/gradle-build-profiles'
+    description = 'Support multiple build profiles for your project. You can activate/deactivate profiles during gradle call'
     tags = ['build', 'profile', 'profiles', 'build-profiles']
 
     plugins {
         buildProfilesPlugin {
-            id = 'net.yahyaalfayad.gradle.plugins.buildprofiles'
+            id = 'net.yhf.build-profiles'
             displayName = 'Build Profiles Plugin'
         }
     }
@@ -46,9 +46,4 @@ uploadArchives {
 uploadArchives.doFirst {
     def localRepoFolder = file('../repo')
     localRepoFolder.deleteDir()
-}
-
-task dummy <<{
-    def localRepoFolder = file('../repo')
-    println(localRepoFolder.list().toArrayString())
 }
