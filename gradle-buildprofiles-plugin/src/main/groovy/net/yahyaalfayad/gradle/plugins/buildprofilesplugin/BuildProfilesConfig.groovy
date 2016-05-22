@@ -5,7 +5,7 @@ import org.gradle.api.Project
 
 class BuildProfilesConfig {
 
-    static final List DEFAULT_PROGRAMING_LANGUAGES = ['java', 'groovy', 'scala']
+    static final List SUPPORTED_PROGRAMING_LANGUAGES = ['java', 'groovy', 'scala']
 
     final Project project
     final UpdateUtils updateUtils;
@@ -20,13 +20,13 @@ class BuildProfilesConfig {
         this.project = project
         this.updateUtils = new UpdateUtils(project)
 
-        programingLanguages = initializeProgramingLanguages()
+        programingLanguages = definedSupportedLanguages()
     }
 
-    private final List initializeProgramingLanguages() {
+    private final List definedSupportedLanguages() {
 
         List definedProgramingLanguages = []
-        final List supportedProgramingLanguages = DEFAULT_PROGRAMING_LANGUAGES
+        final List supportedProgramingLanguages = SUPPORTED_PROGRAMING_LANGUAGES
 
         supportedProgramingLanguages.forEach { programingLanguage ->
 
@@ -51,9 +51,9 @@ class BuildProfilesConfig {
 
     private List commaSeparatedSystemPropertyAsList(String systemProperty) {
 
-        return (System.properties[systemProperty]?.split(',')?.collect {
+        return System.properties[systemProperty]?.split(',')?.collect {
             it.trim()
-        }?.toList() ?: null)
+        }?.toList()
     }
 
     void setBuildProfiles(final List buildProfiles) {
@@ -62,7 +62,7 @@ class BuildProfilesConfig {
         updateSourcesForProfiles()
     }
 
-    List getBuildProfiles(){
+    List getBuildProfiles() {
         return (commaSeparatedSystemPropertyAsList('buildProfiles') ?: (buildProfiles ?: []))
     }
 
