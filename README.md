@@ -28,6 +28,10 @@ Note: you need to add the configuration block after the `apply plugin` block.
 We have two build profiles in the previous example. They are `prod` and `uat`. 
 you can add you own profiles.
 
+An alternative way for specifying build profiles is to use `-DbuildProfiles=prod,uat` when calling
+gradle from command line. This will override values specified in `build.gradle` and can be
+useful when building using continuous integration system.
+
 ## Build profiles tasks
 
 build profiles plugin has the following tasks:
