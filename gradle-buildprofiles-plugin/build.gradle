@@ -1,5 +1,5 @@
-group = 'net.yahyaalfayad.gradle.plugins'
-version = '1.0'
+group = 'build-profiles'
+version = '1.0.1'
 
 buildscript {
     repositories {
