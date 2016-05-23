@@ -19,7 +19,7 @@ apply plugin: 'maven'
 pluginBundle {
     website = 'https://github.com/YahyaAlfayad/gradle-build-profiles'
     vcsUrl = 'https://github.com/YahyaAlfayad/gradle-build-profiles'
-    description = 'Support multiple build profiles for your project. You can activate/deactivate profiles during gradle call'
+    description = 'Support multiple build profiles for your project. You can activate/deactivate profiles during gradle call. Check plugin site for more details: https://github.com/YahyaAlfayad/gradle-build-profiles'
     tags = ['build', 'profile', 'profiles', 'build-profiles']
 
     plugins {
