@@ -11,7 +11,22 @@ In order to get started with the build profiles plugin, you need to do the follo
 
 * Add the build profiles plugin to your `build.gradle` as follows:
 
-` apply plugin: 'gradle-buildprofiles-plugin'`
+```
+
+    buildscript {
+      repositories {
+        maven {
+          url "https://plugins.gradle.org/m2/"
+        }
+      }
+      dependencies {
+        classpath "gradle.plugin.build-profiles:build-profiles-plugin:1.0.2"
+      }
+    }
+    
+    apply plugin: "net.yhf.build-profiles"
+
+```
 
 * Configure your build profiles in `build.gradle` as follows:
 
