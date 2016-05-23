@@ -95,3 +95,9 @@ The same situation applies for `buildProfiles`. You can set the following in `gr
 
 You can also use `-DactiveBuildProfiles=prod,uat` or `-DbuildProfiles=prod,uat`
 when calling gradle from command line. This will override the values defined in `build.gradle`.
+
+## Gradle plugin portal
+
+This plugin is available in gradle plugin portal under the following link:
+
+[https://plugins.gradle.org/plugin/net.yhf.build-profiles](https://plugins.gradle.org/plugin/net.yhf.build-profiles)
