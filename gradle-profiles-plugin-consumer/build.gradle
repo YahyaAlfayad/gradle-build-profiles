@@ -8,9 +8,22 @@ buildscript {
         }
     }
     dependencies {
-        classpath "build-profiles:build-profiles-plugin:1.+"
+        classpath "build-profiles:build-profiles-plugin:+"
     }
 }
+
+// The following section will retrieve the plugin from gradle plugin portal
+//buildscript {
+//    repositories {
+//        maven {
+//            url 'https://plugins.gradle.org/m2/'
+//        }
+//    }
+//    dependencies {
+//        classpath "gradle.plugin.build-profiles:build-profiles-plugin:+"
+//    }
+//}
+// ************************************************************************
 
 apply plugin: 'net.yhf.build-profiles'
 
