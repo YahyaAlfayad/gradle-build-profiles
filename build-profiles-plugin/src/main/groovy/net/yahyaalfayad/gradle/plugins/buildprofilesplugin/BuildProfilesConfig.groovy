@@ -49,7 +49,7 @@ class BuildProfilesConfig {
         return (commaSeparatedSystemPropertyAsList('activeBuildProfiles') ?: (activeBuildProfiles ?: getBuildProfiles()))
     }
 
-    private List commaSeparatedSystemPropertyAsList(String systemProperty) {
+    private static List commaSeparatedSystemPropertyAsList(String systemProperty) {
 
         return System.properties[systemProperty]?.split(',')?.collect {
             it.trim()
