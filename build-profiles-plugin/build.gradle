@@ -12,9 +12,30 @@ buildscript {
     }
 }
 
+repositories {
+    // Also needed for codenarc plugin to work correctly
+    mavenCentral()
+}
+
 apply plugin: 'com.gradle.plugin-publish'
 apply plugin: 'groovy'
 apply plugin: 'maven'
+apply plugin: 'codenarc'
+apply plugin: 'findbugs'
+
+codenarc {
+    ignoreFailures = false
+    sourceSets = [sourceSets.main]
+    reportsDir = file("$project.buildDir/reports/codenarc")
+    configFile = file("codenarcConfig.xml")
+}
+
+findbugs {
+    ignoreFailures = false
+    sourceSets = [sourceSets.main]
+    reportsDir = file("$project.buildDir/reports/findbugs")
+    effort = "max"
+}
 
 pluginBundle {
     website = 'https://github.com/YahyaAlfayad/gradle-build-profiles'
