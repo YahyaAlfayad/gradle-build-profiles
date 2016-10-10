@@ -24,6 +24,6 @@ cd ../gradle-profiles-plugin-consumer
 
 checkExitStatus $? "creating consumer profiles"
 
-./gradlew build $@
+../gradlew clean build $@
 
 checkExitStatus $? "building consumer"
