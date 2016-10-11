@@ -7,29 +7,26 @@ import org.gradle.api.Project
  */
 class SingleBuildProfileConfig {
 
-    // private so user can't modify this in build script
     private final Project project
+
     String name
     boolean active = true
-    Closure dependencies
-    Closure repositories
-    Closure sourceSets
+
+    private Closure dependencies
+    private Closure repositories
 
     SingleBuildProfileConfig(final Project project) {
         this.project = project
     }
 
-//    void dependencies(final Closure deps) {
-//        project.dependencies deps
-//    }
-//
-//    void repositories(final Closure repos) {
-//        project.repositories repos
-//    }
-//
-//    void sourceSets(final Closure sourceSets) {
-//        project.sourceSets sourceSets
-//    }
+    void dependencies(final Closure deps) {
+        this.dependencies = deps
+    }
+
+    void repositories(final Closure repos) {
+        this.repositories = repos
+    }
+
     @Override
     public String toString() {
         return name;

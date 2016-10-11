@@ -49,7 +49,7 @@ class BuildProfilesConfig {
         return definedProgramingLanguages
     }
 
-    List getActiveBuildProfiles() {
+    List<SingleBuildProfileConfig> getActiveBuildProfiles() {
 
         def commandLineDefinedActiveProfiles = commaSeparatedSystemPropertyAsList('activeBuildProfiles')
         List result = []
@@ -77,17 +77,40 @@ class BuildProfilesConfig {
     void buildProfile(@DelegatesTo(value = SingleBuildProfileConfig,
             strategy = Closure.DELEGATE_ONLY) Closure profileConfig) {
 
-        // http://docs.groovy-lang.org/docs/latest/html/documentation/core-domain-specific-languages.html#section-delegatesto
         if (profileConfig) {
-            def buildProfileConfig = new SingleBuildProfileConfig(project)
-            def delegatedClosure = profileConfig.rehydrate(buildProfileConfig, this, this)
-            delegatedClosure.resolveStrategy = Closure.DELEGATE_ONLY
-            delegatedClosure()
-            profiles[buildProfileConfig.name] = buildProfileConfig
-
-            logger.debug("adding profile: $buildProfileConfig")
-
+            createAndAddProfile(profileConfig)
             updateSourcesForProfiles()
+            updateRepositoriesForProfiles()
+            updateDependenciesForProfiles()
+        }
+    }
+
+    void createAndAddProfile(Closure profileConfig) {
+        // http://docs.groovy-lang.org/docs/latest/html/documentation/core-domain-specific-languages.html#section-delegatesto
+        def buildProfileConfig = new SingleBuildProfileConfig(project)
+
+        def delegatedClosure = profileConfig.rehydrate(buildProfileConfig, this, this)
+        delegatedClosure.resolveStrategy = Closure.DELEGATE_ONLY
+        delegatedClosure()
+
+        profiles[buildProfileConfig.name] = buildProfileConfig
+
+        logger.debug("adding profile: $buildProfileConfig")
+    }
+
+    void updateRepositoriesForProfiles() {
+        getActiveBuildProfiles().forEach {
+            if (it.repositories) {
+                project.repositories it.repositories
+            }
+        }
+    }
+
+    void updateDependenciesForProfiles() {
+        getActiveBuildProfiles().forEach {
+            if (it.dependencies) {
+                project.dependencies it.dependencies
+            }
         }
     }
 
@@ -104,9 +127,5 @@ class BuildProfilesConfig {
         }
 
         logger.debug("sources after update: ${project.sourceSets}")
-
-        project.sourceSets.each {
-            logger.debug("detailed sources for: ${it.java.source}")
-        }
     }
 }

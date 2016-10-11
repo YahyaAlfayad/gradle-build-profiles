@@ -33,6 +33,12 @@ buildProfilesConfig {
     buildProfile {
         name = 'prod'
         active = true
+        repositories {
+            mavenLocal()
+        }
+        dependencies {
+            compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
+        }
     }
 
     buildProfile {
@@ -43,4 +49,9 @@ buildProfilesConfig {
 
 dependencies {
     compile group: 'junit', name: 'junit', version: '4.12'
+}
+
+task listrepos << {
+    println "Repositories:"
+    project.repositories.each { println "Name: ${it.name}; url: ${it.url}" }
 }
