@@ -55,3 +55,7 @@ task listrepos << {
     println "Repositories:"
     project.repositories.each { println "Name: ${it.name}; url: ${it.url}" }
 }
+
+task printActiveProfiles << {
+    println "Active profiles are: ${buildProfilesConfig.activeBuildProfiles}"
+}
