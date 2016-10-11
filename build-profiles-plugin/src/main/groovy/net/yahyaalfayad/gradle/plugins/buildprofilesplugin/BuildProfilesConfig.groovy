@@ -2,20 +2,32 @@ package net.yahyaalfayad.gradle.plugins.buildprofilesplugin
 
 import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.utils.UpdateUtils
 import org.gradle.api.Project
+import org.slf4j.LoggerFactory
+
+import static net.yahyaalfayad.gradle.plugins.buildprofilesplugin.utils.GeneralUtils.commaSeparatedSystemPropertyAsList
 
 class BuildProfilesConfig {
 
-    static final List SUPPORTED_PROGRAMING_LANGUAGES = ['java', 'groovy', 'scala']
+    static final List SUPPORTED_PROGRAMING_LANGUAGES = ['java',
+                                                        'groovy',
+                                                        'scala',
+                                                        'kotlin',
+                                                        'assembler',
+                                                        'c',
+                                                        'cpp',
+                                                        'objective-c',
+                                                        'objective-cpp']
+
+    private static final logger = LoggerFactory.getLogger(BuildProfilesConfig.class)
 
     final Project project
     final UpdateUtils updateUtils;
 
-    List programingLanguages
+    List<String> programingLanguages
 
-    List buildProfiles
-    List activeBuildProfiles
+    Map<String, SingleBuildProfileConfig> profiles = [:]
 
-    public BuildProfilesConfig(Project project) {
+    BuildProfilesConfig(Project project) {
 
         this.project = project
         this.updateUtils = new UpdateUtils(project)
@@ -23,12 +35,11 @@ class BuildProfilesConfig {
         programingLanguages = definedSupportedLanguages()
     }
 
-    private final List definedSupportedLanguages() {
+    List definedSupportedLanguages() {
 
         List definedProgramingLanguages = []
-        final List supportedProgramingLanguages = SUPPORTED_PROGRAMING_LANGUAGES
 
-        supportedProgramingLanguages.forEach { programingLanguage ->
+        SUPPORTED_PROGRAMING_LANGUAGES.forEach { programingLanguage ->
 
             if (project.plugins.hasPlugin(programingLanguage)) {
                 definedProgramingLanguages << programingLanguage
@@ -38,42 +49,64 @@ class BuildProfilesConfig {
         return definedProgramingLanguages
     }
 
-    void setActiveBuildProfiles(final List activeBuildProfiles) {
-
-        this.activeBuildProfiles = activeBuildProfiles
-        updateSourcesForProfiles()
-    }
-
     List getActiveBuildProfiles() {
 
-        return (commaSeparatedSystemPropertyAsList('activeBuildProfiles') ?: (activeBuildProfiles ?: getBuildProfiles()))
+        def commandLineDefinedActiveProfiles = commaSeparatedSystemPropertyAsList('activeBuildProfiles')
+        List result = []
+        if (commandLineDefinedActiveProfiles) {
+            commandLineDefinedActiveProfiles.forEach {
+                result.add(profiles[it])
+            }
+            return result
+        } else {
+            profiles.values().forEach {
+                if (it.active) {
+                    result.add(it)
+                }
+            }
+        }
+
+        return result
     }
 
-    private static List commaSeparatedSystemPropertyAsList(String systemProperty) {
+    /**
+     * configure individual profile
+     * @param profileName name of the new build profile.
+     * @param profileConfig custom configuration of the specified profile. null if no custom config is needed.
+     */
+    void buildProfile(@DelegatesTo(value = SingleBuildProfileConfig,
+            strategy = Closure.DELEGATE_ONLY) Closure profileConfig) {
 
-        return System.properties[systemProperty]?.split(',')?.collect {
-            it.trim()
-        }?.toList()
-    }
+        // http://docs.groovy-lang.org/docs/latest/html/documentation/core-domain-specific-languages.html#section-delegatesto
+        if (profileConfig) {
+            def buildProfileConfig = new SingleBuildProfileConfig(project)
+            def delegatedClosure = profileConfig.rehydrate(buildProfileConfig, this, this)
+            delegatedClosure.resolveStrategy = Closure.DELEGATE_ONLY
+            delegatedClosure()
+            profiles[buildProfileConfig.name] = buildProfileConfig
 
-    void setBuildProfiles(final List buildProfiles) {
+            logger.debug("adding profile: $buildProfileConfig")
 
-        this.buildProfiles = buildProfiles
-        updateSourcesForProfiles()
-    }
-
-    List getBuildProfiles() {
-        return (commaSeparatedSystemPropertyAsList('buildProfiles') ?: (buildProfiles ?: []))
+            updateSourcesForProfiles()
+        }
     }
 
     private void updateSourcesForProfiles() {
 
         // remove build profiles before adding only active ones
         // needed in case that buildProfiles was set before active build profiles
-        project.sourceSets.main.java.srcDirs.remove getBuildProfiles()
+        project.sourceSets.main.java.srcDirs.remove profiles.keySet()
+
+        logger.debug("updating sources for profiles: ${getActiveBuildProfiles()}")
 
         getActiveBuildProfiles().forEach { buildProfile ->
-            updateUtils.updateAllFoldersForProfile(buildProfile, getProgramingLanguages())
+            updateUtils.updateAllFoldersForProfile(buildProfile, definedSupportedLanguages())
+        }
+
+        logger.debug("sources after update: ${project.sourceSets}")
+
+        project.sourceSets.each {
+            logger.debug("detailed sources for: ${it.java.source}")
         }
     }
 }

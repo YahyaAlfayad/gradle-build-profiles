@@ -9,6 +9,8 @@ buildscript {
     }
     dependencies {
         classpath "com.gradle.publish:plugin-publish-plugin:0.9.4"
+        classpath "org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:2.1"
+
     }
 }
 
@@ -22,6 +24,16 @@ apply plugin: 'groovy'
 apply plugin: 'maven'
 apply plugin: 'codenarc'
 apply plugin: 'findbugs'
+apply plugin: 'org.sonarqube'
+
+sonarqube {
+    properties {
+        property "sonar.projectName", "Gradle build profiles plugin"
+        property "sonar.projectKey", "build-profiles"
+        property "sonar.jacoco.reportPath", "${project.buildDir}/jacoco/test.exec"
+        property "sonar.host.url", "http://localhost:8000"
+    }
+}
 
 codenarc {
     ignoreFailures = false

@@ -8,7 +8,7 @@ class CreateProfilesTestResourcesTask extends AbstractBuildProfileCreateTask {
     def action() {
 
         buildProfilesConfig.with {
-            buildProfiles.forEach { activeBuildProfile ->
+            profiles.values().forEach { activeBuildProfile ->
                 createUtils.createProfileTestResources(activeBuildProfile)
             }
 

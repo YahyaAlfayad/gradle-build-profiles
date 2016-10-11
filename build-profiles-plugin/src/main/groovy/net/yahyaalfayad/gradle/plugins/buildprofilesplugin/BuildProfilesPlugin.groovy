@@ -14,7 +14,7 @@ class BuildProfilesPlugin implements Plugin<Project> {
     private static Logger logger = LoggerFactory.getLogger(BuildProfilesPlugin.class)
 
     @Override
-    void apply(Project project) {
+    void apply(final Project project) {
 
         logger.debug('applying build profiles plugin')
 
@@ -41,5 +41,11 @@ class BuildProfilesPlugin implements Plugin<Project> {
                           'createProfilesTestSources',
                           'createProfilesTestResources']
         }
+
+//        project.configurations.create('profiles')
+//
+//        project.dependencies {
+//            compile "org.apache.commons:commons-io:1.3.2"
+//        }
     }
 }

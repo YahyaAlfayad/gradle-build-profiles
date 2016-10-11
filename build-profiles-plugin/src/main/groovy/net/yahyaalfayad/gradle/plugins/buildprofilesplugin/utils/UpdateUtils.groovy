@@ -1,5 +1,6 @@
 package net.yahyaalfayad.gradle.plugins.buildprofilesplugin.utils
 
+import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.SingleBuildProfileConfig
 import org.gradle.api.Project
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -18,7 +19,7 @@ class UpdateUtils {
                                     final List currentlySpecifiedLanguages) {
 
         updateAllSourcesForProfile(activeBuildProfile, currentlySpecifiedLanguages)
-        updateAllResourcesByProfile(activeBuildProfile)
+        updateAllResourcesForProfile(activeBuildProfile)
     }
 
     void updateAllSourcesForProfile(final def activeBuildProfile,
@@ -34,7 +35,7 @@ class UpdateUtils {
         updateSourceSetBySourceSetAndProfile('main', activeBuildProfile, currentlySpecifiedLanguages)
     }
 
-    void updateTestSourcesForProfile(final def activeBuildProfile,
+    void updateTestSourcesForProfile(final SingleBuildProfileConfig activeBuildProfile,
                                      final List currentlySpecifiedLanguages) {
 
         updateSourceSetBySourceSetAndProfile('test', activeBuildProfile, currentlySpecifiedLanguages)
@@ -48,15 +49,22 @@ class UpdateUtils {
 
         currentlySpecifiedLanguages.forEach { specifiedProgramingLanguage ->
 
-            logger.debug("updating ${sourceSet} sources for profile: ${buildProfile} and progrming language: ${specifiedProgramingLanguage}")
-            logger.debug("content of ${sourceSet} sources before update is: ${project.sourceSets."$sourceSet"}")
-            logger.debug('adding the following source folder: ' + "src/${sourceSet}/${specifiedProgramingLanguage}-${buildProfile}")
+            logger.with {
+                debug("updating ${sourceSet} sources for profile: ${buildProfile} " +
+                        "and progrming language: ${specifiedProgramingLanguage}")
+                debug("content of ${sourceSet} sources before update is: " +
+                        "${project.sourceSets."$sourceSet"}")
+                debug("adding the following source folder: " +
+                        "src/${sourceSet}/${specifiedProgramingLanguage}-${buildProfile}")
+            }
+
             project.sourceSets."${sourceSet}"."${specifiedProgramingLanguage}".srcDir "src/${sourceSet}/${specifiedProgramingLanguage}-${buildProfile}"
+
             logger.debug("content of ${sourceSet} sources after update is: ${project.sourceSets."$sourceSet"}")
         }
     }
 
-    void updateAllResourcesByProfile(final def buildProfile) {
+    void updateAllResourcesForProfile(final def buildProfile) {
         updateResourcesByProfile('main', buildProfile)
         updateResourcesByProfile('test', buildProfile)
     }
@@ -67,7 +75,7 @@ class UpdateUtils {
         logger.debug("updating ${sourceSet} resources for profile: ${buildProfile}")
 
         project.sourceSets."${sourceSet}".resources.srcDir "src/${sourceSet}/resources-${buildProfile}"
-        logger.debug("content of ${sourceSet} resources after update is: ${project.sourceSets."$sourceSet"}")
 
+        logger.debug("content of ${sourceSet} resources after update is: ${project.sourceSets."$sourceSet"}")
     }
 }

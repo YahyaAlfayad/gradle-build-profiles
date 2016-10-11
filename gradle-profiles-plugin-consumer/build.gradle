@@ -28,5 +28,19 @@ buildscript {
 apply plugin: 'net.yhf.build-profiles'
 
 buildProfilesConfig {
-    buildProfiles = ['prod', 'uat']
+    programingLanguages = ['java', 'groovy']
+
+    buildProfile {
+        name = 'prod'
+        active = true
+    }
+
+    buildProfile {
+        name = 'uat'
+        active = false
+    }
+}
+
+dependencies {
+    compile group: 'junit', name: 'junit', version: '4.12'
 }
