@@ -31,6 +31,11 @@ buildProfilesConfig {
     programingLanguages = ['java', 'groovy']
 
     buildProfile {
+        name = 'uat'
+        active = true
+    }
+
+    buildProfile {
         name = 'prod'
         active = true
         repositories {
@@ -39,11 +44,16 @@ buildProfilesConfig {
         dependencies {
             compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
         }
-    }
-
-    buildProfile {
-        name = 'uat'
-        active = false
+        sourceSets {
+            main {
+                java {
+                    srcDirs = ['src/main/java-prd', 'src/main/java-prod']
+                }
+                resources {
+                    srcDirs = ['src/main/resources-prod']
+                }
+            }
+        }
     }
 }
 

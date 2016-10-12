@@ -1,5 +1,6 @@
 package net.yahyaalfayad.gradle.plugins.buildprofilesplugin
 
+import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.utils.SourceSetGraphCreator
 import net.yahyaalfayad.gradle.plugins.buildprofilesplugin.utils.UpdateUtils
 import org.gradle.api.Project
 import org.slf4j.LoggerFactory
@@ -123,7 +124,28 @@ class BuildProfilesConfig {
         logger.debug("updating sources for profiles: ${getActiveBuildProfiles()}")
 
         getActiveBuildProfiles().forEach { buildProfile ->
-            updateUtils.updateAllFoldersForProfile(buildProfile, definedSupportedLanguages())
+            if (buildProfile.sourceSets) {
+                SourceSetGraphCreator sourceSetGraphCreator = new SourceSetGraphCreator(null, { List callTrace,
+                                                                                                String name = null,
+                                                                                                def val = null ->
+                    if (val) {
+                        def callChain = project.sourceSets
+                        callTrace.each {
+                            String sourceSetName = it[0]
+                            callChain = callChain."$sourceSetName"
+                        }
+
+                        if (callChain."$name" in Iterable) {
+                            callChain."$name" += val
+                        } else {
+                            callChain."$name" = val
+                        }
+                    }
+                })
+                sourceSetGraphCreator.handleClosure buildProfile.sourceSets
+            } else {
+                updateUtils.updateAllFoldersForProfile(buildProfile, definedSupportedLanguages())
+            }
         }
 
         logger.debug("sources after update: ${project.sourceSets}")

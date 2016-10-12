@@ -14,6 +14,7 @@ class SingleBuildProfileConfig {
 
     private Closure dependencies
     private Closure repositories
+    private Closure sourceSets
 
     SingleBuildProfileConfig(final Project project) {
         this.project = project
@@ -25,6 +26,10 @@ class SingleBuildProfileConfig {
 
     void repositories(final Closure repos) {
         this.repositories = repos
+    }
+
+    void sourceSets(final Closure sources) {
+        this.sourceSets = sources
     }
 
     @Override
