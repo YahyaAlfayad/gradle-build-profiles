@@ -88,7 +88,7 @@ class BuildProfilesConfig {
 
     void createAndAddProfile(Closure profileConfig) {
         // http://docs.groovy-lang.org/docs/latest/html/documentation/core-domain-specific-languages.html#section-delegatesto
-        def buildProfileConfig = new SingleBuildProfileConfig(project)
+        def buildProfileConfig = new SingleBuildProfileConfig()
 
         def delegatedClosure = profileConfig.rehydrate(buildProfileConfig, this, this)
         delegatedClosure.resolveStrategy = Closure.DELEGATE_ONLY
