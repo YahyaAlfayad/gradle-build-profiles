@@ -10,6 +10,11 @@ class SingleBuildProfileConfig {
     private Closure dependencies
     private Closure repositories
     private Closure sourceSets
+    final List applyBlocks = []
+
+    void apply(def applyBlock) {
+        applyBlocks << applyBlock
+    }
 
     void dependencies(final Closure deps) {
         this.dependencies = deps

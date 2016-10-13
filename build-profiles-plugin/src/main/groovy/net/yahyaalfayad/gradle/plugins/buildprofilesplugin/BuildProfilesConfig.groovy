@@ -40,7 +40,7 @@ class BuildProfilesConfig {
 
         List definedProgramingLanguages = []
 
-        SUPPORTED_PROGRAMING_LANGUAGES.forEach { programingLanguage ->
+        SUPPORTED_PROGRAMING_LANGUAGES.each { programingLanguage ->
 
             if (project.plugins.hasPlugin(programingLanguage)) {
                 definedProgramingLanguages << programingLanguage
@@ -55,12 +55,12 @@ class BuildProfilesConfig {
         def commandLineDefinedActiveProfiles = commaSeparatedSystemPropertyAsList('activeBuildProfiles')
         List result = []
         if (commandLineDefinedActiveProfiles) {
-            commandLineDefinedActiveProfiles.forEach {
+            commandLineDefinedActiveProfiles.each {
                 result.add(profiles[it])
             }
             return result
         } else {
-            profiles.values().forEach {
+            profiles.values().each {
                 if (it.active) {
                     result.add(it)
                 }
@@ -68,6 +68,10 @@ class BuildProfilesConfig {
         }
 
         return result
+    }
+
+    void executeOnActiveBuildProfiles(Closure closure) {
+        getActiveBuildProfiles().each closure
     }
 
     /**
@@ -80,9 +84,18 @@ class BuildProfilesConfig {
 
         if (profileConfig) {
             createAndAddProfile(profileConfig)
+            executeProfileSpecificApply()
             updateSourcesForProfiles()
             updateRepositoriesForProfiles()
             updateDependenciesForProfiles()
+        }
+    }
+
+    void executeProfileSpecificApply() {
+        getActiveBuildProfiles().each { activeBuildProfile ->
+            activeBuildProfile.applyBlocks.each { applyBlock ->
+                project.apply applyBlock
+            }
         }
     }
 
@@ -100,7 +113,7 @@ class BuildProfilesConfig {
     }
 
     void updateRepositoriesForProfiles() {
-        getActiveBuildProfiles().forEach {
+        executeOnActiveBuildProfiles {
             if (it.repositories) {
                 project.repositories it.repositories
             }
@@ -108,7 +121,7 @@ class BuildProfilesConfig {
     }
 
     void updateDependenciesForProfiles() {
-        getActiveBuildProfiles().forEach {
+        executeOnActiveBuildProfiles {
             if (it.dependencies) {
                 project.dependencies it.dependencies
             }
@@ -123,7 +136,7 @@ class BuildProfilesConfig {
 
         logger.debug("updating sources for profiles: ${getActiveBuildProfiles()}")
 
-        getActiveBuildProfiles().forEach { buildProfile ->
+        executeOnActiveBuildProfiles { buildProfile ->
             if (buildProfile.sourceSets) {
                 SourceSetGraphCreator sourceSetGraphCreator = new SourceSetGraphCreator(null, { List callTrace,
                                                                                                 String name = null,

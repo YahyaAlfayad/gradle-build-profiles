@@ -38,6 +38,9 @@ buildProfilesConfig {
     buildProfile {
         name = 'prod'
         active = true
+
+        // TODO test this and test apply from
+        apply plugin: 'java'
         repositories {
             mavenLocal()
         }
@@ -69,3 +72,5 @@ task listrepos << {
 task printActiveProfiles << {
     println "Active profiles are: ${buildProfilesConfig.activeBuildProfiles}"
 }
+
+// TODO automate test using custom test task
