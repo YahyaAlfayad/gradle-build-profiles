@@ -26,7 +26,7 @@ final class CreateUtils {
                                           final def profile,
                                           final List currentlySpecifiedLanguages) {
 
-        currentlySpecifiedLanguages.forEach { specifiedProgramingLanguage ->
+        currentlySpecifiedLanguages.each { specifiedProgramingLanguage ->
 
             if (project.sourceSets.main.hasProperty("${specifiedProgramingLanguage}")) {
 

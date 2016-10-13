@@ -47,7 +47,7 @@ class UpdateUtils {
 
         logger.debug("updating ${sourceSet} sources for profile: ${buildProfile}")
 
-        currentlySpecifiedLanguages.forEach { specifiedProgramingLanguage ->
+        currentlySpecifiedLanguages.each { specifiedProgramingLanguage ->
 
             logger.with {
                 debug("updating ${sourceSet} sources for profile: ${buildProfile} " +

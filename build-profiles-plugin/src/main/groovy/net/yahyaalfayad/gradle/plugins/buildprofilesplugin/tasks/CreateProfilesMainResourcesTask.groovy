@@ -8,7 +8,7 @@ class CreateProfilesMainResourcesTask extends AbstractBuildProfileCreateTask {
     def action() {
 
         buildProfilesConfig.with {
-            profiles.values().forEach { buildProfile ->
+            profiles.values().each { buildProfile ->
                 createUtils.createProfileMainResources(buildProfile)
             }
         }

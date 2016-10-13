@@ -7,7 +7,7 @@ class CreateProfilesMainSourcesTask extends AbstractBuildProfileCreateTask {
     @TaskAction
     def action() {
         buildProfilesConfig.with {
-            profiles.values().forEach { buildProfile ->
+            profiles.values().each { buildProfile ->
                 createUtils.createProfileMainSources(buildProfile.name, programingLanguages)
             }
         }
