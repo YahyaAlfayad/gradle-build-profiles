@@ -41,11 +41,5 @@ class BuildProfilesPlugin implements Plugin<Project> {
                           'createProfilesTestSources',
                           'createProfilesTestResources']
         }
-
-//        project.configurations.create('profiles')
-//
-//        project.dependencies {
-//            compile "org.apache.commons:commons-io:1.3.2"
-//        }
     }
 }
