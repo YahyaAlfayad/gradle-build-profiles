@@ -1,0 +1,213 @@
+void testApplyProfilesPlugin() {
+    project.apply plugin: 'net.yhf.build-profiles'
+
+    assert project.plugins.hasPlugin('net.yhf.build-profiles')
+}
+
+void testAddingTwoProfiles() {
+    buildProfilesConfig {
+        buildProfile {
+            name = 'uat'
+            active = false
+        }
+        buildProfile {
+            name = 'prod'
+            active = true
+        }
+    }
+
+    project.sourceSets.main.java.asFileTree.with {
+        assert source.findAll {
+            it == 'src/main/java-prod'
+        }
+        assert !source.findAll {
+            it == 'src/main/java-uat'
+        }
+    }
+}
+
+void testCreateProfiles() {
+    // TODO add test sources folders too
+    def testProfile1SorcesFolder = project.file('src/main/java-testprofile1')
+    def testProfile1ResorcesFolder = project.file('src/main/resources-testprofile1')
+    def testProfile2SorcesFolder = project.file('src/main/java-testprofile2')
+    def testProfile2ResorcesFolder = project.file('src/main/resources-testprofile2')
+
+//    testProfile1SorcesFolder.delete()
+//    testProfile1ResorcesFolder.delete()
+//    testProfile2SorcesFolder.delete()
+//    testProfile2ResorcesFolder.delete()
+
+    assert !testProfile1SorcesFolder.exists()
+    assert !testProfile1ResorcesFolder.exists()
+    assert !testProfile2SorcesFolder.exists()
+    assert !testProfile2ResorcesFolder.exists()
+
+    // TODO test custom source folders
+
+    buildProfilesConfig {
+        buildProfile {
+            name = 'testprofile1'
+            active = false
+        }
+        buildProfile {
+            name = 'testprofile2'
+            active = true
+        }
+    }
+
+    // gradle doesn't allow this at the moment
+    // TODO test each create task individually by calling its action methods directly instead of execute()
+    tasks.createProfilesMainSources.action()
+    assert testProfile1SorcesFolder.exists()
+    assert !testProfile2SorcesFolder.exists()
+
+    tasks.createProfilesMainResources.action()
+    assert testProfile1ResorcesFolder.exists()
+    assert !testProfile2ResorcesFolder.exists()
+
+//    testProfile1SorcesFolder.delete()
+//    testProfile1ResorcesFolder.delete()
+//    testProfile2SorcesFolder.delete()
+//    testProfile2ResorcesFolder.delete()
+}
+
+void testCustomProfileSources() {
+    buildProfilesConfig {
+        buildProfile {
+            name = 'uat'
+            active = false
+        }
+        buildProfile {
+            name = 'prod'
+            active = true
+            sourceSets {
+                main {
+                    java {
+                        srcDirs = ['src/main/java-prd']
+                    }
+                    resources {
+                        srcDirs = ['src/main/resources-prd']
+                    }
+                }
+            }
+        }
+    }
+    project.sourceSets.main.java.asFileTree.with {
+        assert source.findAll {
+            it == 'src/main/java-prd'
+        }
+        assert !source.findAll {
+            it == 'src/main/java-prod'
+        }
+        assert !source.findAll {
+            it == 'src/main/java-uat'
+        }
+    }
+
+    project.sourceSets.main.resources.asFileTree.with {
+        assert source.findAll {
+            it == 'src/main/resources-prd'
+        }
+        assert !source.findAll {
+            it == 'src/main/resources-prod'
+        }
+    }
+}
+
+void testProfileSpecificRepositories() {
+    buildProfilesConfig {
+        buildProfile {
+            name = 'uat'
+            active = false
+            repositories {
+                maven {
+                    url 'http://www.google.com/m2'
+                }
+            }
+        }
+        buildProfile {
+            name = 'prod'
+            active = true
+            repositories {
+                jcenter()
+                maven {
+                    url 'https://plugins.gradle.org/m2/'
+                }
+            }
+        }
+    }
+
+    String jcenterUrl = project.repositories.jcenter().url.toString()
+
+    assert project.repositories.findAll {
+        it.url.toString() == 'https://plugins.gradle.org/m2/'
+    }
+    assert project.repositories.findAll {
+        it.url.toString() == jcenterUrl
+    }
+    assert !project.repositories.findAll {
+        it == 'http://www.google.com/m2'
+    }
+}
+
+void testProfileSpecificPlugin() {
+    buildProfilesConfig {
+        buildProfile {
+            name = 'uat'
+            active = false
+            apply plugin: 'antlr'
+        }
+        buildProfile {
+            name = 'prod'
+            active = true
+            apply plugin: 'eclipse'
+        }
+    }
+
+    project.plugins.with {
+        assert hasPlugin('eclipse')
+        assert !hasPlugin('antlr')
+    }
+}
+
+void testProfileSpecificDependencies() {
+    buildProfilesConfig {
+        buildProfile {
+            name = 'uat'
+            active = false
+        }
+        buildProfile {
+            name = 'prod'
+            active = true
+            dependencies {
+                compile group: 'org.slf4j', name: 'slf4j-simple', version: '1.7.21'
+                runtime group: 'org.apache.commons', name: 'commons-math3', version: '3.0'
+            }
+        }
+    }
+
+    project.configurations.with {
+        assert compile.findAll {
+            it.name == 'slf4j-simple-1.7.21.jar'
+        }
+        assert runtime.findAll {
+            it.name == 'commons-math3-3.0.jar'
+        }
+        assert !compile.findAll {
+            it.name == 'commons-math3-3.0.jar'
+        }
+    }
+}
+
+task testPlugin << {
+    testApplyProfilesPlugin()
+    testAddingTwoProfiles()
+    testCreateProfiles()
+    testCustomProfileSources()
+    testProfileSpecificRepositories()
+    testProfileSpecificPlugin()
+    testProfileSpecificDependencies()
+}
+
+test.dependsOn testPlugin

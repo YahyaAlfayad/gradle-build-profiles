@@ -20,10 +20,6 @@ checkExitStatus $? "uploading plugin binaries"
 
 cd ../gradle-profiles-plugin-consumer
 
-../gradlew createProfiles $@
-
-checkExitStatus $? "creating consumer profiles"
-
-../gradlew clean build $@
+../gradlew clean test $@
 
 checkExitStatus $? "building consumer"
