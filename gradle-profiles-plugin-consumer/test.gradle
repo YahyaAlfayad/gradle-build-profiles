@@ -27,21 +27,28 @@ void testAddingTwoProfiles() {
 }
 
 void testCreateProfiles() {
-    // TODO add test sources folders too
-    def testProfile1SorcesFolder = project.file('src/main/java-testprofile1')
-    def testProfile1ResorcesFolder = project.file('src/main/resources-testprofile1')
-    def testProfile2SorcesFolder = project.file('src/main/java-testprofile2')
-    def testProfile2ResorcesFolder = project.file('src/main/resources-testprofile2')
 
-//    testProfile1SorcesFolder.delete()
-//    testProfile1ResorcesFolder.delete()
-//    testProfile2SorcesFolder.delete()
-//    testProfile2ResorcesFolder.delete()
+    // TODO test overwrite already existing sources
+    def testProfile1MainSourcesFolder = project.file('src/main/java-testprofile1')
+    def testProfile1MainResourcesFolder = project.file('src/main/resources-testprofile1')
 
-    assert !testProfile1SorcesFolder.exists()
-    assert !testProfile1ResorcesFolder.exists()
-    assert !testProfile2SorcesFolder.exists()
-    assert !testProfile2ResorcesFolder.exists()
+    def testProfile1TestSourcesFolder = project.file('src/test/java-testprofile1')
+    def testProfile1TestResourcesFolder = project.file('src/test/resources-testprofile1')
+
+    def testProfile2MainSourcesFolder = project.file('src/main/java-testprofile2')
+    def testProfile2MainResourcesFolder = project.file('src/main/resources-testprofile2')
+
+    def testProfile2TestSourcesFolder = project.file('src/test/java-testprofile2')
+    def testProfile2TestResourcesFolder = project.file('src/test/resources-testprofile2')
+
+    assert !testProfile1MainSourcesFolder.exists()
+    assert !testProfile1MainResourcesFolder.exists()
+    assert !testProfile1TestSourcesFolder.exists()
+    assert !testProfile1TestResourcesFolder.exists()
+    assert !testProfile2MainSourcesFolder.exists()
+    assert !testProfile2MainResourcesFolder.exists()
+    assert !testProfile2TestSourcesFolder.exists()
+    assert !testProfile2TestResourcesFolder.exists()
 
     // TODO test custom source folders
 
@@ -56,20 +63,33 @@ void testCreateProfiles() {
         }
     }
 
-    // gradle doesn't allow this at the moment
-    // TODO test each create task individually by calling its action methods directly instead of execute()
     tasks.createProfilesMainSources.action()
-    assert testProfile1SorcesFolder.exists()
-    assert !testProfile2SorcesFolder.exists()
+    assert testProfile1MainSourcesFolder.exists()
+    assert testProfile2MainSourcesFolder.exists()
 
     tasks.createProfilesMainResources.action()
-    assert testProfile1ResorcesFolder.exists()
-    assert !testProfile2ResorcesFolder.exists()
+    assert testProfile1MainResourcesFolder.exists()
+    assert testProfile2MainResourcesFolder.exists()
 
-//    testProfile1SorcesFolder.delete()
-//    testProfile1ResorcesFolder.delete()
-//    testProfile2SorcesFolder.delete()
-//    testProfile2ResorcesFolder.delete()
+    tasks.createProfilesTestSources.action()
+    assert testProfile1TestSourcesFolder.exists()
+    assert testProfile2TestSourcesFolder.exists()
+
+    tasks.createProfilesTestResources.action()
+    assert testProfile1TestResourcesFolder.exists()
+    assert testProfile2TestResourcesFolder.exists()
+
+    // Clean up after test
+
+    testProfile1MainSourcesFolder.delete()
+    testProfile1MainResourcesFolder.delete()
+    testProfile1TestSourcesFolder.delete()
+    testProfile1TestResourcesFolder.delete()
+
+    testProfile2MainSourcesFolder.delete()
+    testProfile2MainResourcesFolder.delete()
+    testProfile2TestSourcesFolder.delete()
+    testProfile2TestResourcesFolder.delete()
 }
 
 void testCustomProfileSources() {
